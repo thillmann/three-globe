@@ -1,0 +1,13 @@
+{
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "./env",
+    "^@app/(.*)$",
+    "^@service/(.*)$",
+    "^@pkg/(.*)$",
+    "^~/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}
