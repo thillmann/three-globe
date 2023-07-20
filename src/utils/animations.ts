@@ -1,5 +1,6 @@
 import { useFrame } from "@react-three/fiber";
-import anime, { AnimeInstance, AnimeParams } from "animejs";
+import type { AnimeInstance, AnimeParams } from "animejs";
+import anime from "animejs";
 import { useRef } from "react";
 
 export function useAnimation(createAnimation: () => AnimeParams) {

@@ -1,14 +1,41 @@
 import { Html, OrbitControls, Stats } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import type { PropsWithChildren } from "react";
 import { Suspense, useLayoutEffect, useRef, useState } from "react";
 import { Await, useLoaderData } from "react-router-dom";
-import { Color, Group, WebGLRenderer } from "three";
+import type { Group } from "three";
+import { Color, WebGLRenderer } from "three";
 
 import { Atmosphere } from "../components/Atmosphere";
 import { Land } from "../components/Land";
 import { calcPosFromLatLonRad } from "../utils/coordinates";
+import { getColorForClassOfTravel } from "../utils/rewardFlights";
 import { Flights } from "./Flights";
 import { Planet } from "./Planet";
+
+function Legend(props: PropsWithChildren) {
+  return (
+    <div className="fixed bottom-8 left-8 bg-white p-2 rounded-lg pointer-events-none select-none shadow-lg">
+      {props.children}
+    </div>
+  );
+}
+
+interface LegendClassProps {
+  color: string;
+}
+
+function LegendClass(props: PropsWithChildren<LegendClassProps>) {
+  return (
+    <div className="flex items-center text-xs sm:text-sm">
+      <div
+        className="w-3 h-3 sm:w-4 sm:h-4 rounded mr-2"
+        style={{ background: props.color }}
+      />
+      {props.children}
+    </div>
+  );
+}
 
 const globeRadius = 5;
 
@@ -36,7 +63,7 @@ function Lighting(props: LightingProps) {
   );
 }
 
-const extraOffset = 2;
+const extraOffset = 0;
 
 function Autofocus() {
   const camera = useThree((state) => state.camera);
@@ -46,7 +73,7 @@ function Autofocus() {
     const timeZoneOffset = date.getTimezoneOffset() || 0;
     const hoursOffset = timeZoneOffset / 60;
     const longitude = (-hoursOffset + extraOffset) * 15;
-    const [x, y, z] = calcPosFromLatLonRad(0, longitude, camera.position.z);
+    const [x, y, z] = calcPosFromLatLonRad(10, longitude, camera.position.z);
     camera.position.set(x, y, z);
   }, [camera]);
 
@@ -57,7 +84,7 @@ export function Earth() {
   const data = useLoaderData() as { flights: Promise<[]> };
   const [autoRotate, setAutoRotate] = useState(true);
   return (
-    <div className="h-screen">
+    <div className="h-screen relative">
       <Canvas
         dpr={window.devicePixelRatio}
         camera={{ position: [0, 0, globeRadius * 2] }}
@@ -108,6 +135,30 @@ export function Earth() {
         <Autofocus />
         {!import.meta.env.PROD && <Stats />}
       </Canvas>
+      <Legend>
+        <LegendClass color={getColorForClassOfTravel("F")}>
+          First class (F)
+        </LegendClass>
+        <LegendClass color={getColorForClassOfTravel("J")}>
+          Business class (J)
+        </LegendClass>
+        <LegendClass color={getColorForClassOfTravel("W")}>
+          Premium economy class (W)
+        </LegendClass>
+        <LegendClass color={getColorForClassOfTravel("Y")}>
+          Economy class (Y)
+        </LegendClass>
+      </Legend>
+      <div className="fixed bottom-8 right-8 text-white text-xs">
+        <a
+          href="https://seats.aero"
+          target="_blank"
+          rel="nofollow noreferrer noopener"
+          className="opacity-50 hover:opacity-100 transition-opacity"
+        >
+          Powered by seats.aero
+        </a>
+      </div>
     </div>
   );
 }

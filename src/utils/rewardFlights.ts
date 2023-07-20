@@ -1,6 +1,6 @@
-import { LngLat } from "./coordinates";
+import type { LngLat } from "./coordinates";
 import { rewardPrograms } from "./rewardPrograms";
-import { Airport, Flight } from "./types";
+import type { Airport, Flight } from "./types";
 
 function processFlights(flights: Flight[]) {
   const routes = new Set<string>();
@@ -53,10 +53,19 @@ export async function fetchFlights(program?: string) {
     return {
       id: flight.ID,
       route: {
+        fromAirport: originAirport?.municipality,
+        toAirport: destinationAirport?.municipality,
         fromIata: origin,
         toIata: destination,
         from: [parseFloat(originLng), parseFloat(originLat)] as LngLat,
         to: [parseFloat(destinationLng), parseFloat(destinationLat)] as LngLat,
+      },
+      date: new Date(flight.Date),
+      availableClasses: {
+        F: flight.FAvailable,
+        J: flight.JAvailable,
+        W: flight.WAvailable,
+        Y: flight.YAvailable,
       },
       maxClassOfTravel: flight.FAvailable
         ? "F"
@@ -70,3 +79,16 @@ export async function fetchFlights(program?: string) {
 }
 
 export type RewardFlights = Awaited<ReturnType<typeof fetchFlights>>;
+
+const travelClassColors = {
+  Y: "#c084fc",
+  W: "#38bdf8",
+  J: "#86efac",
+  F: "#fbbf24",
+} as const;
+
+export function getColorForClassOfTravel(
+  classOfTravel: keyof typeof travelClassColors,
+) {
+  return travelClassColors[classOfTravel];
+}

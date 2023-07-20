@@ -1,13 +1,7 @@
 import { useDetectGPU } from "@react-three/drei";
 import { useLayoutEffect, useMemo, useRef } from "react";
-import {
-  BackSide,
-  Color,
-  InstancedMesh,
-  Object3D,
-  UniformsLib,
-  Vector3,
-} from "three";
+import type { InstancedMesh } from "three";
+import { BackSide, Color, Object3D, UniformsLib, Vector3 } from "three";
 
 import frag from "../shaders/land.frag?raw";
 import vertex from "../shaders/land.vert?raw";

@@ -1,6 +1,8 @@
 import oceanMask from "../assets/mask.webp";
 
 const canvas = document.createElement("canvas");
+canvas.width = 1024;
+canvas.height = 512;
 const context = canvas.getContext("2d");
 
 export function loadEarthMask() {

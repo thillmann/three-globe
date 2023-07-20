@@ -1,7 +1,9 @@
 import { forwardRef, useState } from "react";
-import { CatmullRomCurve3, Color, Mesh, Vector3 } from "three";
+import type { Mesh } from "three";
+import { CatmullRomCurve3, Color, Vector3 } from "three";
 
-import { Coords, calculateDistance } from "../utils/coordinates";
+import type { Coords } from "../utils/coordinates";
+import { calculateDistance } from "../utils/coordinates";
 
 interface ArchProps {
   color?: Color;
@@ -10,7 +12,7 @@ interface ArchProps {
   radius: number;
 }
 
-const tubularSegments = 50;
+const tubularSegments = 48;
 
 function orbitForPath(from: Coords, to: Coords) {
   const distance = calculateDistance(from, to);
@@ -52,10 +54,10 @@ export const Arch = forwardRef<Mesh, ArchProps>(function BaseArch(props, ref) {
   return (
     <mesh ref={ref} receiveShadow={false} castShadow={false}>
       <tubeGeometry
-        args={[path, tubularSegments, 0.01, 16, false]}
+        args={[path, tubularSegments, 0.01, 8, false]}
         drawRange={{ count: 0, start: 0 }}
       />
-      <meshStandardMaterial
+      <meshBasicMaterial
         color={props.color ?? new Color("white")}
         transparent
       />

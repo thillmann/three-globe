@@ -1,4 +1,5 @@
-import { IUniform, UniformsUtils } from "three";
+import type { IUniform } from "three";
+import { UniformsUtils } from "three";
 
 type Uniforms = {
   [key: string]: IUniform<unknown>;

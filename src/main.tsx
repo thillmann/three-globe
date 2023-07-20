@@ -6,12 +6,16 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 
-import { App } from "./App.tsx";
+import { AppLayout } from "./AppLayout.tsx";
 import "./index.css";
+
+console.log(
+  `Created using Vite, React.js and Three.js in Brisbane, Australia. Interested? Reach out to timo@relayforms.com`,
+);
 
 const router = createBrowserRouter([
   {
-    element: <App />,
+    element: <AppLayout />,
     children: [
       { path: "/", element: <Navigate to="/qantas" /> },
       { path: "/:program", lazy: () => import("./pages/Home.tsx") },

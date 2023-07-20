@@ -1,6 +1,6 @@
 import { geolocation } from "@vercel/edge";
 
-import { Flight } from "../src/utils/types";
+import type { Flight } from "../src/utils/types";
 
 export const config = {
   runtime: "edge",
@@ -17,7 +17,7 @@ export default async (request: Request) => {
   const continent = regionToContinent[region ?? "syd1"] ?? "Oceania";
   const body = (await request.json()) as { program?: string };
   const res = await fetch(
-    `https://seats.aero/api/availability?source=${body}`,
+    `https://seats.aero/api/availability?source=${body.program}`,
     {
       method: "GET",
       headers: { accept: "application/json" },
